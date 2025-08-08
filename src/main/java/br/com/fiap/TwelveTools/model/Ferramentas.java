@@ -11,7 +11,7 @@ public class Ferramentas {
 
     @Id
     @Column(name = "id_ferramenta")
-    @GeneratedValue(generator = "feramenta", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "ferramenta", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column
