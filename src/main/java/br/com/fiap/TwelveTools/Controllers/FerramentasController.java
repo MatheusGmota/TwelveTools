@@ -1,7 +1,9 @@
 package br.com.fiap.TwelveTools.Controllers;
 
 import br.com.fiap.TwelveTools.Service.FerrarmentasService;
+import br.com.fiap.TwelveTools.dtos.FerramentaDTO;
 import br.com.fiap.TwelveTools.model.Ferramentas;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,13 +27,14 @@ public class FerramentasController {
     }
 
     @PostMapping()
-    public Object post(@RequestBody Ferramentas ferramentas) {
+    public Object post(@Valid @RequestBody FerramentaDTO ferramentas) {
+
         return service.post(ferramentas);
     }
 
-    @PutMapping()
-    public Object put(@RequestBody Ferramentas ferramentas) {
-        return service.put(ferramentas);
+    @PutMapping("/{id}")
+    public Object put(@PathVariable Long id, @Valid @RequestBody FerramentaDTO ferramentas) {
+        return service.put(id, ferramentas);
     }
 
     @DeleteMapping("/{id}")

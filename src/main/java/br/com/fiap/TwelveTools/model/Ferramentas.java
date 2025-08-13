@@ -1,12 +1,14 @@
 package br.com.fiap.TwelveTools.model;
 
+import br.com.fiap.TwelveTools.dtos.FerramentaDTO;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Table(name="TB_FERRAMENTAS")
 @SequenceGenerator(name = "ferramenta", sequenceName = "SQ_TB_FERRAMENTA",allocationSize = 1)
-@Data
+@NoArgsConstructor
+@Getter @Setter
 public class Ferramentas {
 
     @Id
@@ -28,12 +30,4 @@ public class Ferramentas {
 
     @Column
     private Double preco;
-
-    public Ferramentas(String nome, String tipo, String classificacao, String tamanho, Double preco) {
-        this.nome = nome;
-        this.tipo = tipo;
-        this.classificacao = classificacao;
-        this.tamanho = tamanho;
-        this.preco = preco;
-    }
 }
