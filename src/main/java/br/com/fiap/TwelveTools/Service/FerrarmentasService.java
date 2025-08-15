@@ -1,7 +1,7 @@
 package br.com.fiap.TwelveTools.Service;
 
 import br.com.fiap.TwelveTools.dtos.FerramentaDTO;
-import br.com.fiap.TwelveTools.model.Ferramentas;
+import br.com.fiap.TwelveTools.model.Ferramenta;
 import br.com.fiap.TwelveTools.repository.FerramentasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ public class FerrarmentasService {
     @Autowired
     private FerramentasRepository repository;
 
-    public List<Ferramentas> getAll() {
+    public List<Ferramenta> getAll() {
         return repository.findAll();
     }
 
@@ -22,16 +22,16 @@ public class FerrarmentasService {
         if(id == null) {
             return "Id da ferramenta não encontrado!";
         }
-        Ferramentas ferramentas = repository.findById(id).orElse(null);
-        if(ferramentas == null) {
+        Ferramenta ferramenta = repository.findById(id).orElse(null);
+        if(ferramenta == null) {
             return "Ferramenta não encontrada.";
         }
-        return ferramentas;
+        return ferramenta;
     }
 
     public Object post(FerramentaDTO objeto) {
         if(objeto != null) {
-            Ferramentas ferramenta = new Ferramentas();
+            Ferramenta ferramenta = new Ferramenta();
             ferramenta.setNome(objeto.getNome());
             ferramenta.setTipo(objeto.getTipo());
             ferramenta.setClassificacao(objeto.getClassificacao());
@@ -49,7 +49,7 @@ public class FerrarmentasService {
             return "Id da ferramenta é obrigatório para atualização!";
         }
 
-        Ferramentas existente = repository.findById(id).orElse(null);
+        Ferramenta existente = repository.findById(id).orElse(null);
         if (existente == null) {
             return "Ferramenta não encontrada para o ID informado!";
         }
@@ -65,7 +65,7 @@ public class FerrarmentasService {
     }
 
     public String delete(Long id) {
-        Ferramentas ferramenta = repository.findById(id).orElse(null);
+        Ferramenta ferramenta = repository.findById(id).orElse(null);
         if(ferramenta != null) {
             repository.delete(ferramenta);
             return "Ferramenta deletada com sucesso!";
