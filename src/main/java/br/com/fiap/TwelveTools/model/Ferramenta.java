@@ -1,15 +1,15 @@
 package br.com.fiap.TwelveTools.model;
 
-import br.com.fiap.TwelveTools.dtos.FerramentaDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 @Entity
 @Table(name="TB_FERRAMENTAS")
 @SequenceGenerator(name = "ferramenta", sequenceName = "SQ_TB_FERRAMENTA",allocationSize = 1)
 @NoArgsConstructor
 @Getter @Setter
-public class Ferramentas {
+public class Ferramenta extends RepresentationModel<Ferramenta> {
 
     @Id
     @Column(name = "id_ferramenta")
