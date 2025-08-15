@@ -2,12 +2,17 @@ package br.com.fiap.TwelveTools.Controllers;
 
 import br.com.fiap.TwelveTools.Service.FerrarmentasService;
 import br.com.fiap.TwelveTools.dtos.FerramentaDTO;
-import br.com.fiap.TwelveTools.model.Ferramentas;
+import br.com.fiap.TwelveTools.model.Ferramenta;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @RequestMapping("/ferramentas")
@@ -17,24 +22,43 @@ public class FerramentasController {
     private FerrarmentasService service;
 
     @GetMapping()
-    public List<Ferramentas> get() {
-        return service.getAll();
+    public CollectionModel<Ferramenta> get() {
+        List<Ferramenta> ferramentas = service.getAll();
+
+        for (Ferramenta ferramenta : ferramentas) {
+            String ferramentaId = String.valueOf(ferramenta.getId());
+            Link selfLink = linkTo(FerramentasController.class).slash(ferramentaId).withSelfRel();
+            ferramenta.add(selfLink);
+        }
+
+        Link link = linkTo(FerramentasController.class).withSelfRel();
+        return CollectionModel.of(ferramentas, link);
     }
 
     @GetMapping("/{id}")
-    public Object getById(@PathVariable("id") Long id) {
-        return service.getById(id);
+    public ResponseEntity<Object> getById(@PathVariable("id") Long id) {
+        Object resposta = service.getById(id);
+        if (resposta instanceof Ferramenta) {
+            Link selfLink = linkTo(FerramentasController.class).slash(id).withSelfRel();
+            ((Ferramenta) resposta).add(selfLink);
+            return ResponseEntity.ok().body(resposta);
+        };
+        return ResponseEntity.status(404).body(resposta);
     }
 
     @PostMapping()
-    public Object post(@Valid @RequestBody FerramentaDTO ferramentas) {
+    public ResponseEntity<Object> post(@Valid @RequestBody FerramentaDTO ferramentas) {
+        Object resposta = service.post(ferramentas);
 
-        return service.post(ferramentas);
+        if (resposta instanceof String) return ResponseEntity.status(404).body(resposta);
+        return ResponseEntity.ok(resposta);
     }
 
     @PutMapping("/{id}")
-    public Object put(@PathVariable Long id, @Valid @RequestBody FerramentaDTO ferramentas) {
-        return service.put(id, ferramentas);
+    public ResponseEntity<Object> put(@PathVariable Long id, @Valid @RequestBody FerramentaDTO ferramentas) {
+        Object resposta = service.put(id, ferramentas);
+        if (resposta instanceof String) return ResponseEntity.status(404).body(resposta);
+        return ResponseEntity.ok(resposta);
     }
 
     @DeleteMapping("/{id}")
